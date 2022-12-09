@@ -54,7 +54,7 @@ class LogPersonLine {
     public void setAction(String newName) {
 
         this.Action = newName;
-        System.out.println("this iss  action: " + this.Action);
+        // System.out.println("this iss  action: " + this.Action);
 
     }
 
@@ -67,7 +67,7 @@ class LogPersonLine {
         int temprmid = Integer.parseInt(newName);
         String Roomidcorect = Integer.toString(temprmid);
         this.Room_id = Roomidcorect;
-        System.out.println("this room is : " + this.Room_id);
+        // System.out.println("this room is : " + this.Room_id);
 
     }
 
@@ -148,7 +148,7 @@ class LogPersonLine {
                 csvList.add(line);
                 // whole_line_sp.put(i, result);
             }
-            System.out.println("svList: \n" + csvList + "\n");
+            // System.out.println("svList: \n" + csvList + "\n");
             // System.out.println("size major: \n \n" + csvList.size() + "\n \n");
 
             // System.out.println("size minor: \n \n" + csvList.get(0).size() + "\n \n");
@@ -173,10 +173,10 @@ class LogPersonLine {
                     System.exit(255);
                 }
 
-                System.out.println("last_action:" + last_action);
-                System.out.println("last_room:" + last_room);
-                System.out.println("this action:" + this.Action);
-                System.out.println("this room:" + this.Room_id);
+                // System.out.println("last_action:" + last_action);
+                // System.out.println("last_room:" + last_room);
+                // System.out.println("this action:" + this.Action);
+                // System.out.println("this room:" + this.Room_id);
 
                 if (last_action.equals("no") && this.Room_id.equals("-99")) {
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);

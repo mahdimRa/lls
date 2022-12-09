@@ -1,6 +1,6 @@
-package l_append;
+package l_read;
 
-class ValidateInput {
+class ValidateInputLogRead {
 
     public static boolean timestamp(String ttm) {
         try {
@@ -69,7 +69,7 @@ class ValidateInput {
     public static boolean log(String lg) {
         // boolean resulti = lg.matches("^[a-zA-Z0-9_\\.]+$");
 
-        boolean exis_directory = WorkingFile.checkDirIsexist(lg);
+        boolean exis_directory =  WorkingFileLogRead.checkDirIsexist(lg);
         if (exis_directory) {
             // System.out.println("log is okkkkey");
             return true;

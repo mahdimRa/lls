@@ -1,4 +1,4 @@
-package l_append;
+package l_read;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,7 +9,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-class EncrypAndDecrypt {
+class EncrypAndDecryptLogRead {
     private static SecretKeySpec secretKey;
     private static byte[] key;
     private static final String ALGORITHM = "AES";
@@ -35,8 +35,6 @@ class EncrypAndDecrypt {
             return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
         } catch (Exception e) {
             System.out.println("Error while encrypting: " + e.toString());
-            System.out.println("invalid command Error while encrypting");
-            System.exit(255);
         }
         return null;
     }
@@ -48,9 +46,7 @@ class EncrypAndDecrypt {
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
         } catch (Exception e) {
-            // System.out.println("Error while decrypting: " + e.toString());
-            System.out.println("invalid command Error while decrypting");
-            System.exit(255);
+            System.out.println("Error while decrypting: " + e.toString());
             // System.out.println("invalid");
         }
         return null;
@@ -62,7 +58,7 @@ class EncrypAndDecrypt {
         String secretKey = token;
         String originalString = mg;
 
-        EncrypAndDecrypt aesEncryptionDecryption = new EncrypAndDecrypt();
+        EncrypAndDecryptLogRead aesEncryptionDecryption = new EncrypAndDecryptLogRead();
         String content_encript = aesEncryptionDecryption.encrypt(originalString, secretKey);
 
         // System.out.println("originalString: " + originalString);
@@ -73,7 +69,7 @@ class EncrypAndDecrypt {
 
     public static String decryptPriorFile(String priorfile, String token) {
         String secretKey = token;
-        EncrypAndDecrypt aesEncryptionDecryption = new EncrypAndDecrypt();
+        EncrypAndDecryptLogRead aesEncryptionDecryption = new EncrypAndDecryptLogRead();
         try {
             String content_decrypt_prior_file = aesEncryptionDecryption.decrypt(priorfile, secretKey);
             // System.out.println("the content ^^^^^^^^: "+content_decrypt_prior_file);
