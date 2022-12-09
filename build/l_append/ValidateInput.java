@@ -67,16 +67,22 @@ class ValidateInput {
     }
 
     public static boolean log(String lg) {
-        // boolean resulti = lg.matches("^[a-zA-Z0-9_\\.]+$");
-
+        boolean resulti = lg.matches("^[a-zA-Z0-9/_\\.]+$");
         boolean exis_directory = WorkingFile.checkDirIsexist(lg);
-        if (exis_directory) {
-            // System.out.println("log is okkkkey");
-            return true;
-        } else {
-            // System.out.println("log is badddddd !!!");
+
+        if (resulti) {
+
+            if (exis_directory) {
+                // System.out.println("log is okkkkey");
+                return true;
+            } else {
+                // System.out.println("log is badddddd !!!");
+                return false;
+            }
+        }else{
             return false;
         }
+
     }
 
 }
