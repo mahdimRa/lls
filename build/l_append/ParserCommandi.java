@@ -12,10 +12,13 @@ class ParserCommandi {
         String roid = null;
         String logfile = null;
 
+        Integer count_cmmand = 0;
+
         for (int i = 0; i < args.length - 2; i++) {
 
             if (args[i].equals("-T")) {
                 tim = args[i + 1];
+                count_cmmand +=2;
                 Boolean result = ValidateInput.timestamp(tim);
                 if (result == false) {
                     return false;
@@ -24,6 +27,7 @@ class ParserCommandi {
 
             if (args[i].equals("-K")) {
                 tok = args[i + 1];
+                count_cmmand +=2;
                 Boolean result = ValidateInput.token(tok);
                 if (result == false) {
                     return false;
@@ -32,6 +36,7 @@ class ParserCommandi {
 
             if (args[i].equals("-E")) {
                 emnam = args[i + 1];
+                count_cmmand +=2;
                 Boolean result = ValidateInput.employee_name(emnam);
                 if (result == false) {
                     return false;
@@ -40,6 +45,7 @@ class ParserCommandi {
 
             if (args[i].equals("-G")) {
                 gunam = args[i + 1];
+                count_cmmand +=2;
                 Boolean result = ValidateInput.guest_name(gunam);
                 if (result == false) {
                     return false;
@@ -48,6 +54,7 @@ class ParserCommandi {
 
             if (args[i].equals("-A")) {
                 anm = args[i];
+                count_cmmand +=1;
                 Boolean result = ValidateInput.a_method(anm);
                 if (result == false) {
                     return false;
@@ -56,6 +63,7 @@ class ParserCommandi {
 
             if (args[i].equals("-L")) {
                 lnm = args[i];
+                count_cmmand +=1;
                 Boolean result = ValidateInput.l_method(lnm);
                 if (result == false) {
                     return false;
@@ -64,12 +72,18 @@ class ParserCommandi {
 
             if (args[i].equals("-R")) {
                 roid = args[i + 1];
+                count_cmmand +=2;
                 Boolean result = ValidateInput.room_id(roid);
                 if (result == false) {
                     return false;
                 }
             }
 
+        }
+
+        if (count_cmmand != (args.length - 1)){
+            System.out.println("invalid command");
+            System.exit(255);
         }
 
         logfile = args[args.length - 1];
