@@ -2,6 +2,7 @@ package l_append;
 
 class ParserCommandi {
     public static Boolean input_parser(String args[]) {
+
         String tim = null;
         String tok = null;
         String emnam = null;
@@ -77,26 +78,36 @@ class ParserCommandi {
             return false;
         }
 
+        if (emnam != null && gunam != null) {
+            System.out.println("invalid there are employee and guest in a command ");
+            System.exit(255);
+        }
+
         if (tim != null && tok != null && logfile != null) {
-            if (emnam != null || gunam != null) {
+            if ((emnam != null || gunam != null) && (anm != null || lnm != null)) {
                 LogPersonLine obj = new LogPersonLine();
                 if (tim != null)
                     obj.setTimestamp(tim);
                 if (tok != null)
                     obj.setToken(tok);
-                if (emnam != null)
-                    obj.setEmployee_namel(emnam);
+                if (emnam != null) {
+                    obj.setName(emnam);
+                    obj.setRole("employee");
+                }
                 if (gunam != null)
-                    obj.setGuest_name(gunam);
+                {
+                    obj.setName(gunam);
+                    obj.setRole("guest");
+                }
                 if (anm != null)
-                    obj.setA(anm);
+                    obj.setAction("arrival");
                 if (lnm != null)
-                    obj.setL(lnm);
+                    obj.setAction("departure");
                 if (roid != null)
                     obj.setRoom_id(roid);
                 if (logfile != null)
                     obj.setLog(logfile);
-                System.out.println("logfile: " + obj.getLog());
+                // System.out.println("logfile: " + obj.getLog());
 
                 // if (obj.encrypti() == false) {
                 // return false;

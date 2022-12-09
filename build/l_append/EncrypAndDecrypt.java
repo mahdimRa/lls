@@ -61,8 +61,8 @@ class EncrypAndDecrypt {
         EncrypAndDecrypt aesEncryptionDecryption = new EncrypAndDecrypt();
         String content_encript = aesEncryptionDecryption.encrypt(originalString, secretKey);
 
-        System.out.println("originalString: " + originalString);
-        System.out.println("encryptedString: " + content_encript);
+        // System.out.println("originalString: " + originalString);
+        // System.out.println("encryptedString: " + content_encript);
 
         return content_encript;
     }
@@ -72,7 +72,7 @@ class EncrypAndDecrypt {
         EncrypAndDecrypt aesEncryptionDecryption = new EncrypAndDecrypt();
         try {
             String content_decrypt_prior_file = aesEncryptionDecryption.decrypt(priorfile, secretKey);
-            System.out.println("the content ^^^^^^^^: "+content_decrypt_prior_file);
+            // System.out.println("the content ^^^^^^^^: "+content_decrypt_prior_file);
             return content_decrypt_prior_file;
 
         } catch (Exception exception) {

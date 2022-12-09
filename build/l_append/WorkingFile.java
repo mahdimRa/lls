@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class WorkingFile {
 
@@ -68,16 +70,28 @@ class WorkingFile {
     // }
 
     public static  List<String> readFile(String filename) {
-        List<String> list = new ArrayList<>();
+        // List<String> list = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            list = br.lines().collect(Collectors.toList());
-            // System.out.println(list);
-        } catch (IOException ex) {
-            // e.printStackTrace();
+        // try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+        //     list = br.lines().collect(Collectors.toList());
+        //     // System.out.println(list);
+        // } catch (IOException ex) {
+        //     // e.printStackTrace();
+        // }
+
+        try{
+            String file = filename;
+            Path path = Paths.get(file);
+            List<String> lines = Files.readAllLines(path);
+            return lines;
+
+
+        }catch (IOException ex){
+
         }
+        return null;
+  
 
-        return list;
     }
 
     public static void write_file(String Log, String encryptedString) {

@@ -1,26 +1,20 @@
 package l_append;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.jar.Attributes.Name;
 
 class LogPersonLine {
 
     private String Timestamp;
     private String Token;
-    private String Employee_namel;
-    private String Guest_name;
-    private String A;
-    private String L;
-    private String Room_id;
+    private String Name;
+    private String Role;
+    private String Action;
+    private String Room_id = "-99";
     private String Log;
-    private String mg;
+    private String Mg;
     private String mghash;
     private String encryptedString;
     private String content_decrypt_prior_file;
@@ -30,7 +24,7 @@ class LogPersonLine {
     }
 
     public String getTimestamp() {
-        return Timestamp;
+        return this.Timestamp;
     }
 
     public void setToken(String newName) {
@@ -38,48 +32,47 @@ class LogPersonLine {
     }
 
     public String getToken() {
-        return Token;
+        return this.Token;
     }
 
-    public void setEmployee_namel(String newName) {
-        this.Employee_namel = newName;
+    public void setName(String newName) {
+        this.Name = newName;
     }
 
-    public String getEmployee_namel() {
-        return Employee_namel;
+    public String getName() {
+        return this.Name;
     }
 
-    public void setGuest_name(String newName) {
-        this.Guest_name = newName;
+    public void setRole(String newName) {
+        this.Role = newName;
     }
 
-    public String getGuest_name() {
-        return Guest_name;
+    public String getRole() {
+        return this.Role;
     }
 
-    public void setA(String newName) {
-        this.A = newName;
+    public void setAction(String newName) {
+
+        this.Action = newName;
+        System.out.println("this iss  action: " + this.Action);
+
     }
 
-    public String getA() {
-        return A;
-    }
+    public String getAction() {
 
-    public void setL(String newName) {
-        this.L = newName;
-    }
-
-    public String getL() {
-        return L;
+        return this.Action;
     }
 
     public void setRoom_id(String newName) {
         int temprmid = Integer.parseInt(newName);
         String Roomidcorect = Integer.toString(temprmid);
         this.Room_id = Roomidcorect;
+        System.out.println("this room is : " + this.Room_id);
+
     }
 
     public String getRoom_id() {
+
         return Room_id;
     }
 
@@ -88,33 +81,32 @@ class LogPersonLine {
     }
 
     public String getLog() {
-        System.out.println("this iss  logggg: " + Log);
+        // System.out.println("this iss logggg: " + Log);
 
         return Log;
     }
 
     private void mgcreate() {
 
-        if (Timestamp != null) {
-            mg = "-T " + Timestamp;
+        if (this.Timestamp != null) {
+            this.Mg = this.Timestamp + ";";
         }
-        if (Employee_namel != null) {
-            mg = mg + " -E " + Employee_namel;
+        if (this.Name != null) {
+            this.Mg = this.Mg + this.Name + ";";
         }
-        if (Token != null) {
-            mg = mg + " -K " + Token;
+        if (this.Role != null) {
+            this.Mg = this.Mg + this.Role + ";";
         }
-        if (Guest_name != null) {
-            mg = mg + " -G " + Guest_name;
+
+        if (this.Action != null) {
+            this.Mg = this.Mg + this.Action + ";";
         }
-        if (A != null) {
-            mg = mg + " -A ";
-        }
-        if (L != null) {
-            mg = mg + " -L ";
-        }
-        if (Room_id != null) {
-            mg = mg + " -R " + Room_id;
+        if (this.Room_id != null) {
+            this.Mg = this.Mg + this.Room_id + ";";
+        } else {
+            if (this.Room_id == null) {
+                this.Mg = this.Mg + "-99";
+            }
         }
 
     }
@@ -133,31 +125,146 @@ class LogPersonLine {
             boolean can_decript = false;
             List<String> priorlogfile = new ArrayList<>();
             priorlogfile = WorkingFile.readFile(Log);
-            System.out.println(priorlogfile);
-
+            // System.out.println("size progfile: " + priorlogfile.size());
+            List<List<String>> csvList = new ArrayList<List<String>>();
             for (int i = 0; i < priorlogfile.size(); i++) {
                 can_decript = false;
                 String content_decripted_prior_log = EncrypAndDecrypt.decryptPriorFile(priorlogfile.get(i), Token);
                 if (content_decripted_prior_log == null) {
-                    System.out.println("hacked");
+                    System.out.println("invalid token or integrity is false");
+                    System.exit(255);
                     return false;
-                }else{
+                } else {
                     can_decript = true;
                 }
+                // System.out.println("content_decripted_prior_log:" +
+                // content_decripted_prior_log);
+                String[] result = content_decripted_prior_log.split(";");
+                List<String> line = new ArrayList<>();
+
+                for (int j = 0; j < result.length; j++) {
+                    line.add(result[j]);
+                }
+                csvList.add(line);
+                // whole_line_sp.put(i, result);
             }
+            System.out.println("svList: \n" + csvList + "\n");
+            // System.out.println("size major: \n \n" + csvList.size() + "\n \n");
+
+            // System.out.println("size minor: \n \n" + csvList.get(0).size() + "\n \n");
+
+            String last_action = "no";
+            String last_room = "no";
 
             if (can_decript == true) {
-                encryptedString = EncrypAndDecrypt.toEncryptLog(mg, Token);
-                WorkingFile.write_file(Log, encryptedString);
-                return true;
+
+                if (Integer.parseInt(this.Timestamp) > Integer
+                        .parseInt(csvList.get(csvList.size() - 1).get(0))) {
+
+                    for (int i = 0; i < csvList.size(); i++) {
+                        if (csvList.get(i).get(1).equals(this.Name) && csvList.get(i).get(2).equals(this.Role)) {
+                            last_action = csvList.get(i).get(3);
+                            last_room = csvList.get(i).get(4);
+                        }
+                    }
+
+                } else {
+                    System.out.println("invalid timestamp");
+                    System.exit(255);
+                }
+
+                System.out.println("last_action:" + last_action);
+                System.out.println("last_room:" + last_room);
+                System.out.println("this action:" + this.Action);
+                System.out.println("this room:" + this.Room_id);
+
+                if (last_action.equals("no") && this.Room_id.equals("-99")) {
+                    encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                    WorkingFile.write_file(Log, encryptedString);
+                    return true;
+                } else {
+                    if (last_action.equals("no") && !this.Room_id.equals("-99")) {
+                        System.out.println("invalid action");
+                        System.exit(255);
+                    }
+                }
+
+                // if (last_action.equals(this.Action) && last_action.equals("departure") &&
+                // !this.Room_id.equals("-99")) {
+                // System.out.println("invalid action");
+                // System.exit(255);
+                // } else {
+                // encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                // WorkingFile.write_file(Log, encryptedString);
+                // return true;
+                // }
+
+                if (last_action.equals(this.Action) && last_action.equals("arrival")) {
+                    if (this.Room_id.equals("-99") && last_room.equals("-99")) {
+                        System.out.println("invalid action");
+                        System.exit(255);
+                    }
+                }
+
+                if (last_action.equals(this.Action) && last_action.equals("arrival")) {
+                    if (last_room.equals("-99") && !this.Room_id.equals("-99")) {
+                        encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                        WorkingFile.write_file(Log, encryptedString);
+                        return true;
+                    }
+                }
+
+                if (last_action.equals("arrival") && this.Action.equals("departure")
+                        && last_room.equals(this.Room_id)) {
+                    encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                    WorkingFile.write_file(Log, encryptedString);
+                    return true;
+                }
+
+                if (last_action.equals("departure") && this.Action.equals("arrival") && last_room.equals("-99")
+                        && this.Room_id.equals("-99")) {
+                    encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                    WorkingFile.write_file(Log, encryptedString);
+                    return true;
+                }
+
+                if (last_action.equals("departure") && this.Action.equals("arrival") && last_room.equals("-99")
+                        && !this.Room_id.equals("-99")) {
+                    System.out.println("invalid action");
+                    System.exit(255);
+                }
+
+                if (last_action.equals("departure") && this.Action.equals("arrival") && !last_room.equals("-99")
+                        && this.Room_id.equals("-99")) {
+                    System.out.println("invalid action");
+                    System.exit(255);
+                }
+
+                if (last_action.equals("departure") && this.Action.equals("arrival") && !last_room.equals("-99")
+                        && !this.Room_id.equals("-99")) {
+                    encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                    WorkingFile.write_file(Log, encryptedString);
+                    return true;
+                }
+
+                // encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                // WorkingFile.write_file(Log, encryptedString);
+                // return true;
+                return false;
             } else {
                 return false;
             }
         } else {
-            WorkingFile.createFile(Log);
-            encryptedString = EncrypAndDecrypt.toEncryptLog(mg, Token);
-            WorkingFile.write_file(Log, encryptedString);
-            return true;
+            if (this.Action.equals("arrival") && this.Room_id.equals("-99")) {
+                WorkingFile.createFile(Log);
+                encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
+                WorkingFile.write_file(Log, encryptedString);
+                return true;
+            }
+            System.out.println("invalid action");
+            System.exit(255);
+            return false;
+
         }
 
     }

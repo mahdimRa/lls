@@ -16,4 +16,4 @@ create_bin:
 	cat stub.sh logread.jar > logread && chmod +x logread
 
 clean:
-	$(RM) l_read/*.class l_append/*.class log*
+	$(RM) l_read/*.class l_append/*.class log* 

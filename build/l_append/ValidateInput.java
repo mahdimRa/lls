@@ -64,10 +64,10 @@ class ValidateInput {
 
         boolean exis_directory = WorkingFile.checkDirIsexist(lg);
         if (exis_directory) {
-            System.out.println("log is okkkkey");
+            // System.out.println("log is okkkkey");
             return true;
         } else {
-            System.out.println("log is badddddd !!!");
+            // System.out.println("log is badddddd !!!");
             return false;
         }
     }
