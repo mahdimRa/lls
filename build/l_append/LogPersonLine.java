@@ -161,7 +161,7 @@ class LogPersonLine {
                     cheksum = cheksum + content_decripted_prior_log;
                 }
             }
-            System.out.println("checksum:"+ cheksum);
+            // System.out.println("checksum:"+ cheksum);
 
             
             if (!Hash.create_hash(cheksum).equals(
@@ -338,10 +338,10 @@ class LogPersonLine {
                 encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                 WorkingFile.write_file(Log, encryptedString);
                 String hash_history = Hash.create_hash(Mg);
-                System.out.println("first hash: "+hash_history);
+                // System.out.println("first hash: "+hash_history);
 
                 String count_line_check = EncrypAndDecrypt.toEncryptLog(hash_history, Token);
-                System.out.println("first hash enc: "+count_line_check);
+                // System.out.println("first hash enc: "+count_line_check);
 
                 WorkingFile.write_file(Log, count_line_check);
                 return true;

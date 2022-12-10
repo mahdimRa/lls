@@ -2,6 +2,10 @@ package l_read;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CoreLogread {
@@ -11,6 +15,44 @@ public class CoreLogread {
         File f = new File(logfile);
         if (f.exists()) {
 
+            List<String> priorlogfile_org = new ArrayList<>();
+            priorlogfile_org = WorkingFileLogRead.readFile(logfile);
+
+            String integrity_check_line = EncrypAndDecryptLogRead
+                    .decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1), token);
+
+            Boolean can_decript_ch = false;
+
+            String cheksum = "";
+
+            for (int i = 0; i < priorlogfile_org.size() - 1; i++) {
+                can_decript_ch = false;
+                String content_decripted_prior_log = EncrypAndDecryptLogRead.decryptPriorFile(priorlogfile_org.get(i),
+                        token);
+                if (content_decripted_prior_log == null) {
+                    System.out.println("invalid token or integrity is false");
+                    System.exit(255);
+                    return null;
+                } else {
+                    cheksum = cheksum + content_decripted_prior_log;
+                }
+            }
+            // System.out.println("checksum:" + cheksum);
+
+            if (!HashR.create_hash(cheksum).equals(
+                    EncrypAndDecryptLogRead.decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1),
+                            token))) {
+                HashR.create_hash(cheksum);
+                System.out.println("1: " + HashR.create_hash(cheksum));
+                System.out.println("2: " + EncrypAndDecryptLogRead
+                        .decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1), token));
+
+                System.out.println("invalid integrity");
+                System.exit(255);
+            }
+
+            String checkhash = HashR.create_hash(cheksum);
+
             boolean can_decript = false;
 
             List<String> priorlogfile = new ArrayList<>();
@@ -19,7 +61,7 @@ public class CoreLogread {
 
             List<List<String>> csvList = new ArrayList<List<String>>();
 
-            for (int i = 0; i < priorlogfile.size(); i++) {
+            for (int i = 0; i < priorlogfile.size() - 1; i++) {
                 can_decript = false;
                 String content_decripted_prior_log = EncrypAndDecryptLogRead.decryptPriorFile(priorlogfile.get(i),
                         token);
@@ -38,7 +80,7 @@ public class CoreLogread {
                 }
                 csvList.add(line);
             }
-            System.out.println("svList: \n" + csvList + "\n");
+            // System.out.println("svList: \n" + csvList + "\n");
 
             if (can_decript) {
                 return csvList;
@@ -65,6 +107,66 @@ public class CoreLogread {
         list_log = CoreLogread.file_read(token, logfile);
 
         System.out.println("in Core Mode: \n" + list_log + "\n");
+
+    }
+
+    public static void coreRMode(String token, String dashrole, String name, String logfile) {
+
+        List<List<String>> list_log = new ArrayList<List<String>>();
+
+        list_log = CoreLogread.file_read(token, logfile);
+
+        // System.out.println("in R Core Mode: \n" + list_log + "\n");
+        // System.out.println("token:" + token + " dashrole:" + dashrole + " name:" +
+        // name + " logfile:" + logfile);
+
+        HashSet<String> chronological_room = new HashSet<String>();
+
+        // String gallery = "gallery";
+
+        for (int i = 0; i < list_log.size(); i++) {
+
+            if ((list_log.get(i).get(1).equals(name)) && (list_log.get(i).get(2).equals(dashrole))) {
+                // System.out.println("ROOME NUMBER" + list_log.get(i).get(4));
+
+                if (list_log.get(i).get(4).equals("-99")) {
+                    chronological_room.add("gallery");
+
+                } else {
+                    chronological_room.add(list_log.get(i).get(4));
+
+                }
+
+            }
+
+        }
+
+        // LinkedList<String> list = new LinkedList<>(chronological_room);
+        // Iterator<String> itr = list.descendingIterator();
+
+        List<String> listrev = new ArrayList<>(chronological_room);
+        Collections.reverse(listrev);
+
+        for (String item : listrev) {
+            System.out.print(item + " ");
+
+        }
+        // while (itr.hasNext()) {
+        // // String item = itr.next();
+        // System.out.print(itr.next() + " ");
+
+        // // do something
+        // }
+
+        // Iterator itr = chronological_room.iterator();
+
+        // // check element is present or not. if not loop will
+        // // break.
+        // while (itr.hasNext()) {
+        // System.out.print(itr.next() + " ");
+        // }
+
+        System.out.println("\n");
 
     }
 

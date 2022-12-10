@@ -37,6 +37,7 @@ class LogRead {
 		if (R_mode) {
 			if (argsl.length == 6) {
 				// call parser R mode
+				ParserCommandiLogRead.iput_parse_r_mode(argsl);
 			} else {
 				System.out.println("invalid command R_mode");
 				System.exit(255);
@@ -46,6 +47,8 @@ class LogRead {
 		if (T_mode) {
 			if (argsl.length == 6) {
 				// call parser T mode
+				// ParserCommandiLogRead.iput_parse_t_mode(argsl);
+
 				System.out.println("unimplemented");
 				System.exit(255);
 			} else {
@@ -60,13 +63,13 @@ class LogRead {
 			System.exit(255);
 		}
 
-		System.out.println("S mode: "+S_mode);
-		System.out.println("R mode: "+R_mode);
-		System.out.println("T mode: "+T_mode);
-		System.out.println("I mode: "+I_mode);
+		// System.out.println("S mode: "+S_mode);
+		// System.out.println("R mode: "+R_mode);
+		// System.out.println("T mode: "+T_mode);
+		// System.out.println("I mode: "+I_mode);
 
-		System.out.println(argsl.length);
-		System.out.println("invalid command noone mode");
+		// System.out.println(argsl.length);
+		// System.out.println("invalid command noone mode");
 		System.exit(255);
 
 	}

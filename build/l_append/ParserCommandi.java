@@ -18,7 +18,7 @@ class ParserCommandi {
 
             if (args[i].equals("-T")) {
                 tim = args[i + 1];
-                count_cmmand +=2;
+                count_cmmand += 2;
                 Boolean result = ValidateInput.timestamp(tim);
                 if (result == false) {
                     return false;
@@ -27,7 +27,7 @@ class ParserCommandi {
 
             if (args[i].equals("-K")) {
                 tok = args[i + 1];
-                count_cmmand +=2;
+                count_cmmand += 2;
                 Boolean result = ValidateInput.token(tok);
                 if (result == false) {
                     return false;
@@ -36,7 +36,7 @@ class ParserCommandi {
 
             if (args[i].equals("-E")) {
                 emnam = args[i + 1];
-                count_cmmand +=2;
+                count_cmmand += 2;
                 Boolean result = ValidateInput.employee_name(emnam);
                 if (result == false) {
                     return false;
@@ -45,7 +45,7 @@ class ParserCommandi {
 
             if (args[i].equals("-G")) {
                 gunam = args[i + 1];
-                count_cmmand +=2;
+                count_cmmand += 2;
                 Boolean result = ValidateInput.guest_name(gunam);
                 if (result == false) {
                     return false;
@@ -54,7 +54,7 @@ class ParserCommandi {
 
             if (args[i].equals("-A")) {
                 anm = args[i];
-                count_cmmand +=1;
+                count_cmmand += 1;
                 Boolean result = ValidateInput.a_method(anm);
                 if (result == false) {
                     return false;
@@ -63,7 +63,7 @@ class ParserCommandi {
 
             if (args[i].equals("-L")) {
                 lnm = args[i];
-                count_cmmand +=1;
+                count_cmmand += 1;
                 Boolean result = ValidateInput.l_method(lnm);
                 if (result == false) {
                     return false;
@@ -72,7 +72,7 @@ class ParserCommandi {
 
             if (args[i].equals("-R")) {
                 roid = args[i + 1];
-                count_cmmand +=2;
+                count_cmmand += 2;
                 Boolean result = ValidateInput.room_id(roid);
                 if (result == false) {
                     return false;
@@ -81,7 +81,7 @@ class ParserCommandi {
 
         }
 
-        if (count_cmmand != (args.length - 1)){
+        if (count_cmmand != (args.length - 1)) {
             System.out.println("invalid command");
             System.exit(255);
         }
@@ -97,7 +97,19 @@ class ParserCommandi {
             System.exit(255);
         }
 
+        if (anm != null && lnm != null) {
+
+            // System.out.println("anm :"+anm);
+
+            // System.out.println("lnm :"+lnm);
+
+            System.out.println("invalid -A and -L not should not exist at the same time ");
+            System.exit(255);
+
+        }
+
         if (tim != null && tok != null && logfile != null) {
+
             if ((emnam != null || gunam != null) && (anm != null || lnm != null)) {
                 LogPersonLine obj = new LogPersonLine();
                 if (tim != null)
@@ -108,8 +120,7 @@ class ParserCommandi {
                     obj.setName(emnam);
                     obj.setRole("employee");
                 }
-                if (gunam != null)
-                {
+                if (gunam != null) {
                     obj.setName(gunam);
                     obj.setRole("guest");
                 }

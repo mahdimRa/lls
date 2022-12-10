@@ -19,12 +19,60 @@ class ParserCommandiLogRead {
 			}
 		}
 
-        Boolean toke_check = ValidateInputLogRead.log(logfile);
+        Boolean toke_check = ValidateInputLogRead.token(logfile);
         if (toke_check == false) {
             System.out.println("invalid charecters of toke is not vail");
             System.exit(255);
         }
         CoreLogread.coreSMode(token,logfile);
+    }
+
+
+    public static void iput_parse_r_mode(String args[]){
+        String logfile;
+        String token = null;
+        String dashE = null;
+        String ename = null;
+        String dashG = null;
+        String gname = null;
+
+        logfile = args[args.length - 1];
+        Boolean isdir = ValidateInputLogRead.log(logfile);
+        if (isdir == false) {
+            System.out.println("invalid there is no log file'S path");
+            System.exit(255);
+        }
+
+        for (int i = 0; i < args.length - 2; i++) {
+
+			if (args[i].equals("-K")) {
+				token = args[i+1];
+			}
+
+            if (args[i].equals("-E")) {
+                dashE = "employee";
+				ename = args[i+1];
+			}
+            if (args[i].equals("-G")) {
+                dashG = "guest";
+				gname = args[i+1];
+			}
+		}
+
+        Boolean toke_check = ValidateInputLogRead.token(logfile);
+        if (toke_check == false) {
+            System.out.println("invalid charecters of toke is not vail");
+            System.exit(255);
+        }
+        if(dashE != null && dashG == null){
+            CoreLogread.coreRMode(token,dashE,ename,logfile);
+
+        }
+        if(dashG != null && dashE == null){
+            CoreLogread.coreRMode(token,dashG,gname,logfile);
+
+        }
+
     }
 
 
