@@ -47,9 +47,9 @@ class LogRead {
 		if (T_mode) {
 			if (argsl.length == 6) {
 				// call parser T mode
-				// ParserCommandiLogRead.iput_parse_t_mode(argsl);
+				ParserCommandiLogRead.iput_parse_t_mode(argsl);
 
-				System.out.println("unimplemented");
+				// System.out.println("unimplemented");
 				System.exit(255);
 			} else {
 				System.out.println("invalid command T_mode");

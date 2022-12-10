@@ -170,4 +170,57 @@ public class CoreLogread {
 
     }
 
+    public static void coreTMode(String token, String dashrole, String name, String logfile) {
+
+        List<List<String>> list_log = new ArrayList<List<String>>();
+
+        list_log = CoreLogread.file_read(token, logfile);
+
+        // System.out.println("in R Core Mode: \n" + list_log + "\n");
+        // System.out.println("token:" + token + " dashrole:" + dashrole + " name:" +
+        // name + " logfile:" + logfile);
+
+        String first_time_person = "";
+        String last_time_person = "";
+
+        boolean flag_first_time = false;
+
+        // String gallery = "gallery";
+
+        for (int i = 0; i < list_log.size(); i++) {
+
+            if ((list_log.get(i).get(1).equals(name)) && (list_log.get(i).get(2).equals(dashrole))) {
+                // System.out.println("ROOME NUMBER" + list_log.get(i).get(4));
+
+                if (!flag_first_time) {
+                    first_time_person = list_log.get(i).get(0);
+                    flag_first_time = true;
+                }
+                if (flag_first_time) {
+                    last_time_person = list_log.get(i).get(0);
+                }
+
+            }
+
+        }
+
+        if (!first_time_person.equals("") && last_time_person.equals("")) {
+            System.out.println(
+                    Integer.parseInt(list_log.get(list_log.size() - 1).get(0)) - Integer.parseInt(first_time_person));
+
+        }
+
+        if (!first_time_person.equals("") && !last_time_person.equals("")) {
+            System.out.println(Integer.parseInt(last_time_person) - Integer.parseInt(first_time_person));
+
+        }
+        if (first_time_person.equals("") && last_time_person.equals("")) {
+            System.out.println("");
+
+        }
+
+        
+
+    }
+
 }
