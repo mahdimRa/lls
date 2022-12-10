@@ -5,18 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoreLogread {
-    public static void coreSMode(String token, String logfile) {
 
-        List<List<String>> list_log = new ArrayList<List<String>>();
-
-        list_log = CoreLogread.file_read(token,logfile);
-        
-        System.out.println("in Core Mode: \n" + list_log + "\n");
-
-
-    }
-
-    public static List<List<String>> file_read(String token, String logfile) {
+    private static List<List<String>> file_read(String token, String logfile) {
 
         File f = new File(logfile);
         if (f.exists()) {
@@ -67,4 +57,15 @@ public class CoreLogread {
         System.exit(255);
         return null;
     }
+
+    public static void coreSMode(String token, String logfile) {
+
+        List<List<String>> list_log = new ArrayList<List<String>>();
+
+        list_log = CoreLogread.file_read(token, logfile);
+
+        System.out.println("in Core Mode: \n" + list_log + "\n");
+
+    }
+
 }

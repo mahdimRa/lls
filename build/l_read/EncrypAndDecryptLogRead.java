@@ -35,6 +35,8 @@ class EncrypAndDecryptLogRead {
             return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
         } catch (Exception e) {
             System.out.println("Error while encrypting: " + e.toString());
+            System.out.println("invalid command Error while encrypting");
+            System.exit(255);
         }
         return null;
     }
@@ -46,8 +48,8 @@ class EncrypAndDecryptLogRead {
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
         } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e.toString());
-            // System.out.println("invalid");
+            System.out.println("invalid command Error while decrypting");
+            System.exit(255);
         }
         return null;
     }

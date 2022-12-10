@@ -178,12 +178,12 @@ class LogPersonLine {
                 // System.out.println("this action:" + this.Action);
                 // System.out.println("this room:" + this.Room_id);
 
-                if (last_action.equals("no") && this.Room_id.equals("-99")) {
+                if (last_action.equals("no") && this.Room_id.equals("-99") && this.Action.equals("arrival")) {
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                     WorkingFile.write_file(Log, encryptedString);
                     return true;
                 } else {
-                    if (last_action.equals("no") && !this.Room_id.equals("-99")) {
+                    if (last_action.equals("no") && !this.Room_id.equals("-99")&& !this.Action.equals("arrival")) {
                         System.out.println("invalid action");
                         System.exit(255);
                     }
@@ -250,8 +250,12 @@ class LogPersonLine {
                 // encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                 // WorkingFile.write_file(Log, encryptedString);
                 // return true;
+                System.out.println("invalid action");
+                System.exit(255);
                 return false;
             } else {
+                System.out.println("invalid action");
+                System.exit(255);
                 return false;
             }
         } else {
