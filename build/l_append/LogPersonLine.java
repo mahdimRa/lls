@@ -1,6 +1,7 @@
 package l_append;
 
 import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,7 @@ class LogPersonLine {
     public void setAction(String newName) {
 
         this.Action = newName;
-        // System.out.println("this iss  action: " + this.Action);
+        // System.out.println("this iss action: " + this.Action);
 
     }
 
@@ -114,6 +115,22 @@ class LogPersonLine {
     // public void hashmg() {
     // mghash = Hash.create_hash(mg);
     // }
+    private static void delete_last_line_log(String namelog) {
+        try {
+            RandomAccessFile f = new RandomAccessFile(namelog, "rw");
+            long length = f.length() - 1;
+            byte b;
+            do {
+                length -= 1;
+                f.seek(length);
+                b = f.readByte();
+            } while (b != 10);
+            f.setLength(length + 1);
+            f.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
 
     public boolean file() {
         this.mgcreate();
@@ -122,12 +139,54 @@ class LogPersonLine {
 
         File f = new File(Log);
         if (f.exists()) {
+
+            List<String> priorlogfile_org = new ArrayList<>();
+            priorlogfile_org = WorkingFile.readFile(Log);
+
+            String integrity_check_line = EncrypAndDecrypt
+                    .decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1), Token);
+
+            Boolean can_decript_ch = false;
+
+            String cheksum = "";
+
+            for (int i = 0; i < priorlogfile_org.size() - 1; i++) {
+                can_decript_ch = false;
+                String content_decripted_prior_log = EncrypAndDecrypt.decryptPriorFile(priorlogfile_org.get(i), Token);
+                if (content_decripted_prior_log == null) {
+                    System.out.println("invalid token or integrity is false");
+                    System.exit(255);
+                    return false;
+                } else {
+                    cheksum = cheksum + content_decripted_prior_log;
+                }
+            }
+            System.out.println("checksum:"+ cheksum);
+
+            
+            if (!Hash.create_hash(cheksum).equals(
+                    EncrypAndDecrypt.decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1), Token))) {
+                Hash.create_hash(cheksum);
+                System.out.println("1: " + Hash.create_hash(cheksum));
+                System.out.println("2: " + EncrypAndDecrypt.decryptPriorFile(priorlogfile_org.get(priorlogfile_org.size() - 1), Token));
+
+                System.out.println("invalid integrity");
+                System.exit(255);
+            }
+
+            String checkhash = Hash.create_hash(cheksum);
+
+            // String checksize = Integer.toString(priorlogfile_org.size() + 1);
+
+            // if (!integrity_check_line.equals(Integer.toString(priorlogfile_org.size())))
+
             boolean can_decript = false;
             List<String> priorlogfile = new ArrayList<>();
             priorlogfile = WorkingFile.readFile(Log);
             // System.out.println("size progfile: " + priorlogfile.size());
             List<List<String>> csvList = new ArrayList<List<String>>();
-            for (int i = 0; i < priorlogfile.size(); i++) {
+
+            for (int i = 0; i < priorlogfile.size() - 1; i++) {
                 can_decript = false;
                 String content_decripted_prior_log = EncrypAndDecrypt.decryptPriorFile(priorlogfile.get(i), Token);
                 if (content_decripted_prior_log == null) {
@@ -179,11 +238,14 @@ class LogPersonLine {
                 // System.out.println("this room:" + this.Room_id);
 
                 if (last_action.equals("no") && this.Room_id.equals("-99") && this.Action.equals("arrival")) {
+                    delete_last_line_log(Log);
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                     WorkingFile.write_file(Log, encryptedString);
+                    String count_line_check = EncrypAndDecrypt.toEncryptLog(Hash.create_hash(cheksum+Mg), Token);
+                    WorkingFile.write_file(Log, count_line_check);
                     return true;
                 } else {
-                    if (last_action.equals("no") && !this.Room_id.equals("-99")&& !this.Action.equals("arrival")) {
+                    if (last_action.equals("no") && !this.Room_id.equals("-99") && !this.Action.equals("arrival")) {
                         System.out.println("invalid action");
                         System.exit(255);
                     }
@@ -208,23 +270,32 @@ class LogPersonLine {
 
                 if (last_action.equals(this.Action) && last_action.equals("arrival")) {
                     if (last_room.equals("-99") && !this.Room_id.equals("-99")) {
+                        delete_last_line_log(Log);
                         encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                         WorkingFile.write_file(Log, encryptedString);
+                        String count_line_check = EncrypAndDecrypt.toEncryptLog(Hash.create_hash(cheksum+Mg), Token);
+                        WorkingFile.write_file(Log, count_line_check);
                         return true;
                     }
                 }
 
                 if (last_action.equals("arrival") && this.Action.equals("departure")
                         && last_room.equals(this.Room_id)) {
+                    delete_last_line_log(Log);
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                     WorkingFile.write_file(Log, encryptedString);
+                    String count_line_check = EncrypAndDecrypt.toEncryptLog(Hash.create_hash(cheksum+Mg), Token);
+                    WorkingFile.write_file(Log, count_line_check);
                     return true;
                 }
 
                 if (last_action.equals("departure") && this.Action.equals("arrival") && last_room.equals("-99")
                         && this.Room_id.equals("-99")) {
+                    delete_last_line_log(Log);
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                     WorkingFile.write_file(Log, encryptedString);
+                    String count_line_check = EncrypAndDecrypt.toEncryptLog(Hash.create_hash(cheksum+Mg), Token);
+                    WorkingFile.write_file(Log, count_line_check);
                     return true;
                 }
 
@@ -242,8 +313,11 @@ class LogPersonLine {
 
                 if (last_action.equals("departure") && this.Action.equals("arrival") && !last_room.equals("-99")
                         && !this.Room_id.equals("-99")) {
+                    delete_last_line_log(Log);
                     encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                     WorkingFile.write_file(Log, encryptedString);
+                    String count_line_check = EncrypAndDecrypt.toEncryptLog(Hash.create_hash(cheksum+Mg), Token);
+                    WorkingFile.write_file(Log, count_line_check);
                     return true;
                 }
 
@@ -263,6 +337,13 @@ class LogPersonLine {
                 WorkingFile.createFile(Log);
                 encryptedString = EncrypAndDecrypt.toEncryptLog(Mg, Token);
                 WorkingFile.write_file(Log, encryptedString);
+                String hash_history = Hash.create_hash(Mg);
+                System.out.println("first hash: "+hash_history);
+
+                String count_line_check = EncrypAndDecrypt.toEncryptLog(hash_history, Token);
+                System.out.println("first hash enc: "+count_line_check);
+
+                WorkingFile.write_file(Log, count_line_check);
                 return true;
             }
             System.out.println("invalid action");
