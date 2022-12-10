@@ -185,41 +185,56 @@ public class CoreLogread {
 
         boolean flag_first_time = false;
 
+        String last_room = "";
+
         // String gallery = "gallery";
 
         for (int i = 0; i < list_log.size(); i++) {
 
             if ((list_log.get(i).get(1).equals(name)) && (list_log.get(i).get(2).equals(dashrole))) {
                 // System.out.println("ROOME NUMBER" + list_log.get(i).get(4));
-
+                if (flag_first_time) {
+                    last_time_person = list_log.get(i).get(0);
+                    last_room = list_log.get(i).get(4);
+                }
                 if (!flag_first_time) {
                     first_time_person = list_log.get(i).get(0);
                     flag_first_time = true;
-                }
-                if (flag_first_time) {
-                    last_time_person = list_log.get(i).get(0);
                 }
 
             }
 
         }
+        // System.out.println("first_time_person: "+first_time_person);
+
+        // System.out.println("last_time_person: "+last_time_person);
+
 
         if (!first_time_person.equals("") && last_time_person.equals("")) {
+            // System.out.println("firstime is and last time not");
+
             System.out.println(
                     Integer.parseInt(list_log.get(list_log.size() - 1).get(0)) - Integer.parseInt(first_time_person));
 
         }
 
-        if (!first_time_person.equals("") && !last_time_person.equals("")) {
+        if (!first_time_person.equals("") && !last_time_person.equals("") && last_room.equals("-99")) {
+            // System.out.println("firstime is and last time is room -99");
+
             System.out.println(Integer.parseInt(last_time_person) - Integer.parseInt(first_time_person));
 
         }
-        if (first_time_person.equals("") && last_time_person.equals("")) {
+
+        if (!first_time_person.equals("") && !last_time_person.equals("") && !last_room.equals("-99")) {
+            // System.out.println("firstime is and last time is room not !99");
+
+            System.out.println(
+                    Integer.parseInt(list_log.get(list_log.size() - 1).get(0)) - Integer.parseInt(first_time_person));
+        }
+        if (first_time_person.equals("noti") && last_time_person.equals("noti")) {
             System.out.println("");
 
         }
-
-        
 
     }
 
